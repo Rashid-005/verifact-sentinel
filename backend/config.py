@@ -12,5 +12,5 @@ NEBIUS_MODEL = os.getenv("NEBIUS_MODEL", "nvidia/llama-3.1-nemotron-70b-instruct
 
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY", "")
 
-HOST = os.getenv("HOST", "127.0.0.1")
+HOST = os.getenv("HOST", "0.0.0.0")
 PORT = int(os.getenv("PORT", "8000"))
