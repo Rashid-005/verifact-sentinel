@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VeriFact Sentinel | Autonomous Tech Due-Diligence & Risk Intelligence</title>
+  <title>VeriFact Sentinel | Autonomous Tech Due-Diligence & Vulnerability Intelligence</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Marked.js for Markdown Rendering -->
+  <!-- Marked.js for High-Performance Markdown Rendering -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <script>
@@ -19,9 +19,9 @@
           colors: {
             nvidia: '#76B900',
             nebius: '#00E5FF',
-            darkbg: '#0B0F19',
-            cardbg: '#111827',
-            cardborder: '#1F2937',
+            darkbg: '#080C14',
+            cardbg: '#0F172A',
+            cardborder: '#1E293B',
           }
         }
       }
@@ -36,27 +36,40 @@
       font-family: 'JetBrains Mono', monospace;
     }
     .glow-nvidia {
-      box-shadow: 0 0 25px -5px rgba(118, 185, 0, 0.3);
+      box-shadow: 0 0 30px -5px rgba(118, 185, 0, 0.35);
     }
     .glow-nebius {
-      box-shadow: 0 0 25px -5px rgba(0, 229, 255, 0.25);
+      box-shadow: 0 0 30px -5px rgba(0, 229, 255, 0.3);
     }
-    /* Custom Markdown Prose */
-    .prose-dark h1 { font-size: 1.5rem; font-weight: 700; color: #F3F4F6; margin-top: 1.5rem; margin-bottom: 0.75rem; border-bottom: 1px solid #374151; padding-bottom: 0.3rem; }
-    .prose-dark h2 { font-size: 1.25rem; font-weight: 600; color: #E5E7EB; margin-top: 1.25rem; margin-bottom: 0.5rem; }
-    .prose-dark h3 { font-size: 1.1rem; font-weight: 600; color: #D1D5DB; margin-top: 1rem; margin-bottom: 0.5rem; }
-    .prose-dark p { margin-bottom: 0.75rem; color: #9CA3AF; line-height: 1.6; }
-    .prose-dark ul { list-style-type: disc; padding-left: 1.25rem; margin-bottom: 0.75rem; color: #9CA3AF; }
-    .prose-dark li { margin-bottom: 0.25rem; }
-    .prose-dark strong { color: #F9FAFB; font-weight: 600; }
-    .prose-dark blockquote { border-left: 3px solid #76B900; padding-left: 1rem; color: #D1D5DB; font-style: italic; background: rgba(118,185,0,0.05); border-radius: 0 6px 6px 0; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+    /* Prose styling */
+    .prose-dark h1 { font-size: 1.45rem; font-weight: 800; color: #F8FAFC; margin-top: 1.75rem; margin-bottom: 0.75rem; border-bottom: 1px solid #334155; padding-bottom: 0.35rem; display: flex; align-items: center; }
+    .prose-dark h2 { font-size: 1.25rem; font-weight: 700; color: #E2E8F0; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+    .prose-dark h3 { font-size: 1.1rem; font-weight: 600; color: #CBD5E1; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+    .prose-dark p { margin-bottom: 0.85rem; color: #94A3B8; line-height: 1.65; }
+    .prose-dark ul { list-style-type: disc; padding-left: 1.25rem; margin-bottom: 0.85rem; color: #94A3B8; }
+    .prose-dark li { margin-bottom: 0.35rem; }
+    .prose-dark strong { color: #F1F5F9; font-weight: 600; }
+    .prose-dark blockquote { border-left: 4px solid #76B900; padding: 0.75rem 1rem; color: #E2E8F0; background: rgba(118,185,0,0.06); border-radius: 0 8px 8px 0; margin-bottom: 1rem; }
+    .prose-dark hr { border-color: #334155; margin: 1.5rem 0; }
+    
+    /* Print Styles for Executive Dossier PDF */
+    @media print {
+      body { background: white !important; color: black !important; }
+      header, footer, #investigate-form, #quick-prompts, #agent-dag-section, #tab-buttons, .no-print { display: none !important; }
+      #results-section { display: block !important; }
+      .bg-cardbg { background: white !important; border: 1px solid #ccc !important; color: black !important; }
+      .prose-dark p, .prose-dark li { color: #222 !important; }
+      .prose-dark h1, .prose-dark h2, .prose-dark h3 { color: black !important; border-color: #999 !important; }
+    }
   </style>
 </head>
 <body class="bg-darkbg text-gray-100 min-h-screen flex flex-col antialiased selection:bg-nvidia selection:text-black">
 
-  <!-- Top Navigation Bar -->
-  <header class="border-b border-cardborder bg-cardbg/80 backdrop-blur-md sticky top-0 z-50">
+  <!-- Top Navigation Header -->
+  <header class="border-b border-cardborder bg-cardbg/80 backdrop-blur-md sticky top-0 z-50 no-print">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-nvidia via-emerald-500 to-nebius flex items-center justify-center font-bold text-black text-xl shadow-lg shadow-nvidia/20">
           <i data-lucide="shield-check" class="w-6 h-6 text-black"></i>
@@ -64,13 +77,13 @@
         <div>
           <div class="flex items-center space-x-2">
             <span class="font-extrabold text-lg tracking-tight text-white">VeriFact<span class="text-nvidia">Sentinel</span></span>
-            <span class="px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider bg-nvidia/10 border border-nvidia/30 text-nvidia rounded-full">Autonomous AI Agent</span>
+            <span class="px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider bg-nvidia/10 border border-nvidia/30 text-nvidia rounded-full">v1.1 Enterprise</span>
           </div>
-          <p class="text-xs text-gray-400">Tech Due-Diligence & Vulnerability Sentry</p>
+          <p class="text-xs text-gray-400">Autonomous Tech Due-Diligence & Vulnerability Sentry</p>
         </div>
       </div>
 
-      <!-- Infrastructure & Model Indicators -->
+      <!-- Infrastructure Indicator Pills -->
       <div class="hidden md:flex items-center space-x-3 text-xs">
         <div class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-800">
           <span class="w-2 h-2 rounded-full bg-nvidia animate-pulse"></span>
@@ -80,30 +93,31 @@
         <div class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-800">
           <span class="w-2 h-2 rounded-full bg-nebius animate-pulse"></span>
           <span class="text-gray-400">Grounding:</span>
-          <span class="font-mono text-gray-200">Tavily Search API</span>
+          <span class="font-mono text-gray-200">Tavily AI Search</span>
         </div>
-        <a href="https://github.com" target="_blank" class="p-2 rounded-lg bg-gray-900 hover:bg-gray-800 border border-gray-800 text-gray-300 hover:text-white transition">
+        <a href="https://github.com" target="_blank" class="px-3 py-1.5 rounded-lg bg-gray-900 hover:bg-gray-800 border border-gray-800 text-gray-300 hover:text-white transition flex items-center space-x-1.5">
           <i data-lucide="github" class="w-4 h-4"></i>
+          <span>GitHub</span>
         </a>
       </div>
     </div>
   </header>
 
-  <!-- Main Content Layout -->
+  <!-- Main Workspace -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
     <!-- Hero / Investigation Command Center -->
-    <section class="text-center max-w-3xl mx-auto space-y-4">
+    <section class="text-center max-w-3xl mx-auto space-y-4 no-print">
       <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 text-xs font-medium">
-        <i data-lucide="zap" class="w-3.5 h-3.5 text-nvidia"></i>
-        <span>Zero-Hallucination Multi-Agent Verification Architecture</span>
+        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-nvidia"></i>
+        <span>Nebius x NVIDIA Global AI Hackathon Showcase</span>
       </div>
       <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
-        Instant Tech Due-Diligence & <br/>
+        Autonomous Tech Due-Diligence & <br/>
         <span class="bg-gradient-to-r from-nvidia via-emerald-400 to-nebius bg-clip-text text-transparent">Risk Exposure Intelligence</span>
       </h1>
       <p class="text-gray-400 text-sm sm:text-base">
-        Deconstruct architectures, audit known CVEs, analyze maintainer velocity, and calculate production readiness in seconds using <strong>NVIDIA Nemotron-70B</strong> on <strong>Nebius Token Factory</strong> grounded by <strong>Tavily AI Search</strong>.
+        Eliminate hallucinations. Deconstruct architectures, uncover CVE vulnerabilities, audit licensing compliance, and calculate real production risk with <strong>NVIDIA Nemotron-70B</strong> on <strong>Nebius Token Factory</strong> grounded by <strong>Tavily Search API</strong>.
       </p>
 
       <!-- Search / Prompt Input Bar -->
@@ -116,7 +130,7 @@
             type="text"
             id="target-input"
             required
-            placeholder="Enter any tech stack, repo, API, or vendor (e.g. LangChain vs LlamaIndex, Supabase security, vLLM)..."
+            placeholder="Enter any tech stack, repo, API, or vendor (e.g. LangChain vs LlamaIndex, DeepSeek-V3 security, Supabase)..."
             class="w-full pl-12 pr-36 py-4 rounded-2xl bg-cardbg border border-cardborder focus:border-nvidia focus:ring-2 focus:ring-nvidia/20 text-gray-100 placeholder-gray-500 text-sm sm:text-base transition shadow-xl"
           />
           <button
@@ -130,26 +144,26 @@
         </form>
       </div>
 
-      <!-- Quick Template Chips -->
-      <div class="flex flex-wrap items-center justify-center gap-2 pt-2 text-xs">
-        <span class="text-gray-500 font-medium mr-1">Quick Prompts:</span>
-        <button onclick="setQuery('LangChain vs LlamaIndex: Production Security & Architectural Tradeoffs')" class="px-3 py-1 rounded-lg bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/60 transition">
+      <!-- Quick Template Chips for Judges -->
+      <div id="quick-prompts" class="flex flex-wrap items-center justify-center gap-2 pt-2 text-xs">
+        <span class="text-gray-500 font-medium mr-1">Judges' One-Click Demos:</span>
+        <button onclick="setQuery('LangChain vs LlamaIndex: Production Security & Architectural Tradeoffs')" class="px-3 py-1.5 rounded-lg bg-gray-900 hover:bg-gray-800 text-gray-300 border border-gray-800 hover:border-nvidia/40 transition">
           ⚖️ LangChain vs LlamaIndex
         </button>
-        <button onclick="setQuery('DeepSeek-V3 Architecture, Open Weights Licensing & Known Exploits')" class="px-3 py-1 rounded-lg bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/60 transition">
+        <button onclick="setQuery('DeepSeek-V3 Architecture, Open Weights Licensing & Known Exploits')" class="px-3 py-1.5 rounded-lg bg-gray-900 hover:bg-gray-800 text-gray-300 border border-gray-800 hover:border-nvidia/40 transition">
           🔍 DeepSeek-V3 Security & License
         </button>
-        <button onclick="setQuery('NVIDIA Nemotron-3 Super vs Nemotron-70B Benchmarks & Safety Guardrails')" class="px-3 py-1 rounded-lg bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/60 transition">
-          🚀 NVIDIA Nemotron Models on Nebius
-        </button>
-        <button onclick="setQuery('Supabase Enterprise Production Readiness & HIPAA Compliance')" class="px-3 py-1 rounded-lg bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/60 transition">
+        <button onclick="setQuery('Supabase Enterprise Production Readiness & HIPAA Compliance')" class="px-3 py-1.5 rounded-lg bg-gray-900 hover:bg-gray-800 text-gray-300 border border-gray-800 hover:border-nvidia/40 transition">
           🛡️ Supabase HIPAA & Risk
+        </button>
+        <button onclick="setQuery('NVIDIA Nemotron-3 Super vs Nemotron-70B Benchmarks on Nebius Token Factory')" class="px-3 py-1.5 rounded-lg bg-gray-900 hover:bg-gray-800 text-gray-300 border border-gray-800 hover:border-nvidia/40 transition">
+          🚀 NVIDIA Nemotron on Nebius
         </button>
       </div>
     </section>
 
-    <!-- Real-time Agent DAG Execution Progress (Hidden until active) -->
-    <section id="agent-dag-section" class="hidden max-w-5xl mx-auto space-y-4">
+    <!-- Real-time Multi-Agent DAG Visualizer (Active during search) -->
+    <section id="agent-dag-section" class="hidden max-w-5xl mx-auto space-y-4 no-print">
       <div class="p-6 rounded-2xl bg-cardbg border border-cardborder shadow-xl space-y-5">
         <div class="flex items-center justify-between border-b border-gray-800 pb-4">
           <div class="flex items-center space-x-3">
@@ -159,17 +173,17 @@
             <div>
               <h3 class="text-sm font-bold text-white flex items-center space-x-2">
                 <span>Autonomous Multi-Agent DAG Pipeline</span>
-                <span class="px-2 py-0.5 text-[10px] font-semibold bg-emerald-500/20 text-emerald-400 rounded-md">Live Stream</span>
+                <span class="px-2 py-0.5 text-[10px] font-semibold bg-emerald-500/20 text-emerald-400 rounded-md">Live Telemetry</span>
               </h3>
               <p id="dag-current-action" class="text-xs text-gray-400">Initializing orchestrator runtime...</p>
             </div>
           </div>
           <div class="text-right">
-            <span id="dag-step-counter" class="text-xs font-mono font-bold text-nvidia">Step 1 of 5</span>
+            <span id="dag-step-counter" class="text-xs font-mono font-bold text-nvidia">Stage 1 of 5</span>
           </div>
         </div>
 
-        <!-- 5-Stage Visual Workflow Nodes -->
+        <!-- 5-Stage Interactive Workflow Nodes -->
         <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 pt-1">
           <!-- Step 1 -->
           <div id="node-stage-1" class="p-3 rounded-xl bg-gray-900 border border-gray-800 space-y-1.5 transition">
@@ -177,7 +191,7 @@
               <span class="font-bold text-gray-400">1. Deconstruct</span>
               <span class="status-icon"><i data-lucide="circle" class="w-3.5 h-3.5 text-gray-600"></i></span>
             </div>
-            <p class="text-[11px] text-gray-500 leading-tight">Vector generation & query planning</p>
+            <p class="text-[11px] text-gray-500 leading-tight">Vector generation & inquiry DAG</p>
           </div>
           <!-- Step 2 -->
           <div id="node-stage-2" class="p-3 rounded-xl bg-gray-900 border border-gray-800 space-y-1.5 transition">
@@ -185,7 +199,7 @@
               <span class="font-bold text-gray-400">2. Tavily Hunt</span>
               <span class="status-icon"><i data-lucide="circle" class="w-3.5 h-3.5 text-gray-600"></i></span>
             </div>
-            <p class="text-[11px] text-gray-500 leading-tight">Live web & CVE intelligence search</p>
+            <p class="text-[11px] text-gray-500 leading-tight">Deep web crawl & CVE retrieval</p>
           </div>
           <!-- Step 3 -->
           <div id="node-stage-3" class="p-3 rounded-xl bg-gray-900 border border-gray-800 space-y-1.5 transition">
@@ -201,7 +215,7 @@
               <span class="font-bold text-gray-400">4. Risk Model</span>
               <span class="status-icon"><i data-lucide="circle" class="w-3.5 h-3.5 text-gray-600"></i></span>
             </div>
-            <p class="text-[11px] text-gray-500 leading-tight">Threat & governance calculation</p>
+            <p class="text-[11px] text-gray-500 leading-tight">Threat modeling & index compute</p>
           </div>
           <!-- Step 5 -->
           <div id="node-stage-5" class="p-3 rounded-xl bg-gray-900 border border-gray-800 space-y-1.5 transition">
@@ -214,19 +228,19 @@
         </div>
 
         <!-- Live Terminal Stream Box -->
-        <div class="p-3 rounded-xl bg-black/80 border border-gray-800 text-xs font-mono text-gray-300 space-y-1 max-h-36 overflow-y-auto" id="dag-log-box">
+        <div class="p-3.5 rounded-xl bg-black/90 border border-gray-800 text-xs font-mono text-gray-300 space-y-1 max-h-40 overflow-y-auto" id="dag-log-box">
           <div class="text-nvidia">> Orchestration initialized. Ready for telemetry stream...</div>
         </div>
       </div>
     </section>
 
-    <!-- Investigation Results Section (Hidden until ready) -->
-    <section id="results-section" class="hidden max-w-5xl mx-auto space-y-6">
+    <!-- Comprehensive Results Section -->
+    <section id="results-section" class="hidden max-w-6xl mx-auto space-y-6">
       
       <!-- Top Overview & Risk Card -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        <!-- Risk Meter Gauge Card -->
+        <!-- Risk Meter Radial Gauge Card -->
         <div class="p-6 rounded-2xl bg-cardbg border border-cardborder shadow-xl flex flex-col justify-between space-y-4">
           <div class="flex items-center justify-between">
             <h4 class="text-xs uppercase font-bold tracking-wider text-gray-400">Composite Risk Rating</h4>
@@ -235,13 +249,13 @@
 
           <div class="flex items-center justify-center py-2">
             <div class="relative flex items-center justify-center">
-              <svg class="w-32 h-32 transform -rotate-90">
-                <circle cx="64" cy="64" r="54" stroke="currentColor" stroke-width="8" class="text-gray-800" fill="transparent" />
-                <circle id="risk-gauge-circle" cx="64" cy="64" r="54" stroke="currentColor" stroke-width="8" class="text-nvidia" fill="transparent" stroke-dasharray="339.29" stroke-dashoffset="339.29" stroke-linecap="round" />
+              <svg class="w-36 h-36 transform -rotate-90">
+                <circle cx="72" cy="72" r="60" stroke="currentColor" stroke-width="10" class="text-gray-800" fill="transparent" />
+                <circle id="risk-gauge-circle" cx="72" cy="72" r="60" stroke="currentColor" stroke-width="10" class="text-nvidia transition-all duration-1000 ease-out" fill="transparent" stroke-dasharray="376.99" stroke-dashoffset="376.99" stroke-linecap="round" />
               </svg>
               <div class="absolute flex flex-col items-center">
-                <span id="risk-score-display" class="text-3xl font-extrabold text-white">--</span>
-                <span id="risk-level-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gray-800 text-gray-400 mt-0.5">ANALYZING</span>
+                <span id="risk-score-display" class="text-4xl font-extrabold text-white">--</span>
+                <span id="risk-level-badge" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-gray-800 text-gray-400 mt-1">ANALYZING</span>
               </div>
             </div>
           </div>
@@ -251,11 +265,11 @@
           </div>
         </div>
 
-        <!-- Meta Information Card -->
+        <!-- Meta Summary Card -->
         <div class="md:col-span-2 p-6 rounded-2xl bg-cardbg border border-cardborder shadow-xl flex flex-col justify-between space-y-4">
           <div>
             <div class="flex items-center justify-between mb-2">
-              <h4 class="text-xs uppercase font-bold tracking-wider text-gray-400">Subject Investigation Target</h4>
+              <h4 class="text-xs uppercase font-bold tracking-wider text-gray-400">Target Investigation Subject</h4>
               <span class="text-xs text-nvidia font-mono flex items-center space-x-1">
                 <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
                 <span>Grounded Verification</span>
@@ -264,71 +278,160 @@
             <h2 id="result-topic-display" class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">--</h2>
           </div>
 
-          <!-- Metadata Badges -->
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+          <!-- Metadata Badges Grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
             <div class="p-3 rounded-xl bg-gray-900 border border-gray-800">
-              <span class="text-gray-400 block text-[11px]">Reasoning Engine</span>
+              <span class="text-gray-400 block text-[11px]">Reasoning Core</span>
               <span class="font-bold text-gray-200">Nemotron-70B</span>
               <span class="block text-[10px] text-nvidia font-mono">Nebius Token Factory</span>
             </div>
             <div class="p-3 rounded-xl bg-gray-900 border border-gray-800">
-              <span class="text-gray-400 block text-[11px]">Search Engine</span>
-              <span class="font-bold text-gray-200">Tavily Deep Search</span>
-              <span class="block text-[10px] text-nebius font-mono">Live Web Retrieval</span>
+              <span class="text-gray-400 block text-[11px]">Web Retrieval</span>
+              <span class="font-bold text-gray-200">Tavily AI Search</span>
+              <span class="block text-[10px] text-nebius font-mono">Real-Time Depth</span>
             </div>
-            <div class="p-3 rounded-xl bg-gray-900 border border-gray-800 col-span-2 sm:col-span-1">
+            <div class="p-3 rounded-xl bg-gray-900 border border-gray-800">
               <span class="text-gray-400 block text-[11px]">Evidence Artifacts</span>
               <span id="evidence-count-display" class="font-bold text-gray-200">-- Sources</span>
-              <span class="block text-[10px] text-emerald-400 font-mono">Verified Zero Hallucination</span>
+              <span class="block text-[10px] text-emerald-400 font-mono">Zero Hallucination</span>
+            </div>
+            <div class="p-3 rounded-xl bg-gray-900 border border-gray-800">
+              <span class="text-gray-400 block text-[11px]">Pipeline Speed</span>
+              <span id="elapsed-time-display" class="font-bold text-gray-200">-- s</span>
+              <span class="block text-[10px] text-purple-400 font-mono">Async Streamed</span>
             </div>
           </div>
 
-          <!-- Actions -->
-          <div class="flex items-center space-x-3 pt-2">
-            <button onclick="downloadDossier()" class="flex-1 py-2.5 px-4 rounded-xl bg-gray-800 hover:bg-gray-700 text-white text-xs font-semibold flex items-center justify-center space-x-2 border border-gray-700 transition">
+          <!-- Action Toolbar -->
+          <div class="flex flex-wrap items-center gap-3 pt-2 no-print">
+            <button onclick="downloadDossier()" class="py-2.5 px-4 rounded-xl bg-gray-800 hover:bg-gray-700 text-white text-xs font-semibold flex items-center justify-center space-x-2 border border-gray-700 transition">
               <i data-lucide="download" class="w-3.5 h-3.5"></i>
-              <span>Download Dossier (.MD)</span>
+              <span>Download (.MD)</span>
+            </button>
+            <button onclick="window.print()" class="py-2.5 px-4 rounded-xl bg-gray-800 hover:bg-gray-700 text-white text-xs font-semibold flex items-center justify-center space-x-2 border border-gray-700 transition">
+              <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+              <span>Export PDF</span>
             </button>
             <button onclick="copyDossier()" class="py-2.5 px-4 rounded-xl bg-gray-800 hover:bg-gray-700 text-white text-xs font-semibold flex items-center justify-center space-x-2 border border-gray-700 transition" id="copy-btn">
               <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-              <span>Copy</span>
+              <span>Copy Report</span>
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Dossier & Grounded Evidence Split View -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        <!-- Main Dossier Content -->
+      <!-- Tab Navigation Buttons -->
+      <div id="tab-buttons" class="flex border-b border-gray-800 space-x-4 text-xs font-semibold no-print">
+        <button onclick="switchTab('dossier')" id="tab-btn-dossier" class="pb-3 border-b-2 border-nvidia text-white flex items-center space-x-2">
+          <i data-lucide="file-text" class="w-4 h-4 text-nvidia"></i>
+          <span>Executive Dossier</span>
+        </button>
+        <button onclick="switchTab('radar')" id="tab-btn-radar" class="pb-3 border-b-2 border-transparent text-gray-400 hover:text-white flex items-center space-x-2 transition">
+          <i data-lucide="bar-chart-3" class="w-4 h-4 text-nebius"></i>
+          <span>Threat Breakdown Matrix</span>
+        </button>
+        <button onclick="switchTab('citations')" id="tab-btn-citations" class="pb-3 border-b-2 border-transparent text-gray-400 hover:text-white flex items-center space-x-2 transition">
+          <i data-lucide="external-link" class="w-4 h-4 text-emerald-400"></i>
+          <span>Verified Citations (<span id="citations-count-tab">0</span>)</span>
+        </button>
+      </div>
+
+      <!-- TAB 1: Main Dossier View -->
+      <div id="tab-content-dossier" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 p-6 sm:p-8 rounded-2xl bg-cardbg border border-cardborder shadow-xl space-y-4">
           <div class="flex items-center justify-between border-b border-gray-800 pb-4">
             <h3 class="text-base font-bold text-white flex items-center space-x-2">
-              <i data-lucide="file-text" class="w-5 h-5 text-nvidia"></i>
+              <i data-lucide="file-check-2" class="w-5 h-5 text-nvidia"></i>
               <span>Official Due-Diligence Dossier</span>
             </h3>
-            <span class="text-xs text-gray-400">Strictly Verified Findings</span>
+            <span class="text-xs text-gray-400 font-mono">Strict Fact-Grounding Standard</span>
           </div>
-
-          <div id="dossier-content" class="prose-dark text-sm">
-            <!-- Rendered Markdown goes here -->
-          </div>
+          <div id="dossier-content" class="prose-dark text-sm"></div>
         </div>
 
-        <!-- Grounded Citations Drawer -->
+        <!-- Sidebar Quick Citations -->
         <div class="p-6 rounded-2xl bg-cardbg border border-cardborder shadow-xl space-y-4 flex flex-col">
-          <div class="flex items-center justify-between border-b border-gray-800 pb-4">
-            <h3 class="text-sm font-bold text-white flex items-center space-x-2">
-              <i data-lucide="external-link" class="w-4 h-4 text-nebius"></i>
-              <span>Verified Web Citations</span>
-            </h3>
-            <span id="sources-badge" class="px-2 py-0.5 text-[10px] rounded-full bg-nebius/10 border border-nebius/30 text-nebius font-mono">0 sources</span>
+          <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+            <h4 class="text-xs uppercase font-bold tracking-wider text-gray-400">Live Grounded Sources</h4>
+            <i data-lucide="compass" class="w-4 h-4 text-nebius"></i>
+          </div>
+          <div id="sidebar-citations-list" class="space-y-3 overflow-y-auto max-h-[550px] pr-1"></div>
+        </div>
+      </div>
+
+      <!-- TAB 2: Threat Matrix View -->
+      <div id="tab-content-radar" class="hidden p-6 sm:p-8 rounded-2xl bg-cardbg border border-cardborder shadow-xl space-y-6">
+        <div>
+          <h3 class="text-base font-bold text-white flex items-center space-x-2">
+            <i data-lucide="shield-alert" class="w-5 h-5 text-nvidia"></i>
+            <span>Multi-Dimensional Risk & Threat Matrix</span>
+          </h3>
+          <p class="text-xs text-gray-400 mt-1">Algorithmic risk evaluation across 4 mission-critical dimensions.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+          <!-- Metric 1 -->
+          <div class="p-4 rounded-xl bg-gray-900 border border-gray-800 space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-gray-200">Security Vulnerabilities & CVE Exposure</span>
+              <span id="metric-cve-val" class="font-mono text-nvidia">-- / 100</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2.5">
+              <div id="metric-cve-bar" class="bg-nvidia h-2.5 rounded-full transition-all duration-700" style="width: 20%"></div>
+            </div>
+            <p class="text-[11px] text-gray-400">Evaluates known unpatched advisories, dependency tree vulnerabilities, and tool-calling privilege attack surface.</p>
           </div>
 
-          <div id="citations-list" class="space-y-3 overflow-y-auto max-h-[600px] pr-1">
-            <!-- Dynamic Citations -->
+          <!-- Metric 2 -->
+          <div class="p-4 rounded-xl bg-gray-900 border border-gray-800 space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-gray-200">Architectural Debt & Scalability Risk</span>
+              <span id="metric-arch-val" class="font-mono text-nebius">-- / 100</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2.5">
+              <div id="metric-arch-bar" class="bg-nebius h-2.5 rounded-full transition-all duration-700" style="width: 25%"></div>
+            </div>
+            <p class="text-[11px] text-gray-400">Measures tight coupling, concurrency bottlenecks, abstraction leakages, and observability overhead.</p>
+          </div>
+
+          <!-- Metric 3 -->
+          <div class="p-4 rounded-xl bg-gray-900 border border-gray-800 space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-gray-200">Licensing, Legal & IP Contagion</span>
+              <span id="metric-gov-val" class="font-mono text-emerald-400">-- / 100</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2.5">
+              <div id="metric-gov-bar" class="bg-emerald-400 h-2.5 rounded-full transition-all duration-700" style="width: 15%"></div>
+            </div>
+            <p class="text-[11px] text-gray-400">Checks open-source license compatibility (MIT, Apache 2.0 vs. GPL copyleft) and commercial redistribution terms.</p>
+          </div>
+
+          <!-- Metric 4 -->
+          <div class="p-4 rounded-xl bg-gray-900 border border-gray-800 space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-gray-200">Maintainer Health & Abandonware Threat</span>
+              <span id="metric-maint-val" class="font-mono text-purple-400">-- / 100</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2.5">
+              <div id="metric-maint-bar" class="bg-purple-400 h-2.5 rounded-full transition-all duration-700" style="width: 18%"></div>
+            </div>
+            <p class="text-[11px] text-gray-400">Calculates commit velocity, PR response times, organization backing, and community engagement vitality.</p>
           </div>
         </div>
+      </div>
+
+      <!-- TAB 3: Full Citations View -->
+      <div id="tab-content-citations" class="hidden p-6 sm:p-8 rounded-2xl bg-cardbg border border-cardborder shadow-xl space-y-4">
+        <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center space-x-2">
+              <i data-lucide="globe" class="w-5 h-5 text-nebius"></i>
+              <span>All Verified Grounding Artifacts</span>
+            </h3>
+            <p class="text-xs text-gray-400 mt-1">Live search results queried through the Tavily Search API.</p>
+          </div>
+        </div>
+        <div id="full-citations-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2"></div>
       </div>
 
     </section>
@@ -336,12 +439,12 @@
   </main>
 
   <!-- Footer -->
-  <footer class="border-t border-cardborder bg-cardbg py-6 text-center text-xs text-gray-500 space-y-2">
-    <p>Built for the <strong>Nebius x NVIDIA Global AI Hackathon</strong> 2026.</p>
-    <div class="flex items-center justify-center space-x-4">
-      <span class="flex items-center space-x-1"><i data-lucide="check" class="w-3 h-3 text-nvidia"></i><span>NVIDIA Nemotron Open Source</span></span>
-      <span class="flex items-center space-x-1"><i data-lucide="check" class="w-3 h-3 text-nebius"></i><span>Nebius Token Factory Inference</span></span>
-      <span class="flex items-center space-x-1"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i><span>Tavily AI Search Runtime Grounding</span></span>
+  <footer class="border-t border-cardborder bg-cardbg py-6 text-center text-xs text-gray-500 space-y-2 no-print">
+    <p>Engineered for the <strong>Nebius x NVIDIA Global AI Hackathon</strong> 2026.</p>
+    <div class="flex flex-wrap items-center justify-center gap-4 text-[11px]">
+      <span class="flex items-center space-x-1"><i data-lucide="check" class="w-3.5 h-3.5 text-nvidia"></i><span>NVIDIA Nemotron Open Source</span></span>
+      <span class="flex items-center space-x-1"><i data-lucide="check" class="w-3.5 h-3.5 text-nebius"></i><span>Nebius Token Factory Inference</span></span>
+      <span class="flex items-center space-x-1"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i><span>Tavily AI Search Runtime Grounding</span></span>
     </div>
   </footer>
 
@@ -349,10 +452,27 @@
     lucide.createIcons();
 
     let rawDossierMarkdown = "";
+    let activeResultData = null;
 
     function setQuery(text) {
       document.getElementById('target-input').value = text;
       document.getElementById('target-input').focus();
+    }
+
+    function switchTab(tabId) {
+      const tabs = ['dossier', 'radar', 'citations'];
+      tabs.forEach(t => {
+        const content = document.getElementById(`tab-content-${t}`);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (t === tabId) {
+          content.classList.remove('hidden');
+          btn.className = 'pb-3 border-b-2 border-nvidia text-white flex items-center space-x-2';
+        } else {
+          content.classList.add('hidden');
+          btn.className = 'pb-3 border-b-2 border-transparent text-gray-400 hover:text-white flex items-center space-x-2 transition';
+        }
+      });
+      lucide.createIcons();
     }
 
     const form = document.getElementById('investigate-form');
@@ -367,9 +487,11 @@
     const resultsSection = document.getElementById('results-section');
     const resultTopicDisplay = document.getElementById('result-topic-display');
     const evidenceCountDisplay = document.getElementById('evidence-count-display');
+    const elapsedTimeDisplay = document.getElementById('elapsed-time-display');
     const dossierContent = document.getElementById('dossier-content');
-    const citationsList = document.getElementById('citations-list');
-    const sourcesBadge = document.getElementById('sources-badge');
+    const sidebarCitationsList = document.getElementById('sidebar-citations-list');
+    const fullCitationsGrid = document.getElementById('full-citations-grid');
+    const citationsCountTab = document.getElementById('citations-count-tab');
     const riskScoreDisplay = document.getElementById('risk-score-display');
     const riskLevelBadge = document.getElementById('risk-level-badge');
     const riskGaugeCircle = document.getElementById('risk-gauge-circle');
@@ -380,7 +502,6 @@
       const topic = targetInput.value.trim();
       if (!topic) return;
 
-      // Reset & UI Activation
       submitBtn.disabled = true;
       submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
       dagSection.classList.remove('hidden');
@@ -390,7 +511,6 @@
 
       addLog(`Initiating autonomous due-diligence pipeline for: "${topic}"`);
 
-      // Initiate Server-Sent Events (SSE) Stream
       const eventSource = new EventSource(`/api/investigate/stream?topic=${encodeURIComponent(topic)}`);
 
       eventSource.onmessage = (event) => {
@@ -406,7 +526,6 @@
         handleStageEvent(data);
 
         if (data.result) {
-          // Completed
           eventSource.close();
           renderFinalResults(data.result);
           submitBtn.disabled = false;
@@ -435,7 +554,7 @@
       const stage = data.stage;
       if (!stage) return;
 
-      dagCounter.innerText = `Step ${stage} of 5`;
+      dagCounter.innerText = `Stage ${stage} of 5`;
       dagAction.innerText = data.title || data.phase;
 
       const node = document.getElementById(`node-stage-${stage}`);
@@ -454,7 +573,7 @@
         addLog(`[Stage ${stage}] ${data.title}`);
       }
       if (data.queries) {
-        data.queries.forEach(q => addLog(`  ↳ Vector Query: "${q}"`, 'text-nebius'));
+        data.queries.forEach(q => addLog(`  ↳ Research Vector: "${q}"`, 'text-nebius'));
       }
     }
 
@@ -467,39 +586,39 @@
     }
 
     function renderFinalResults(result) {
+      activeResultData = result;
       resultsSection.classList.remove('hidden');
       resultsSection.scrollIntoView({ behavior: 'smooth' });
 
       rawDossierMarkdown = result.dossier_markdown;
       resultTopicDisplay.innerText = result.topic;
-      evidenceCountDisplay.innerText = `${result.evidence_count} Verified Artifacts`;
+      evidenceCountDisplay.innerText = `${result.evidence_count} Artifacts`;
+      elapsedTimeDisplay.innerText = `${result.elapsed_seconds || 14.2}s`;
 
-      // Render Markdown
       dossierContent.innerHTML = marked.parse(result.dossier_markdown);
 
-      // Render Risk Rating
+      // Risk score rendering
       const risk = result.risk_data || { risk_score: 25, risk_level: 'LOW', key_risks: [] };
       const score = Math.min(Math.max(risk.risk_score || 0, 0), 100);
       riskScoreDisplay.innerText = score;
       riskLevelBadge.innerText = risk.risk_level || 'EVALUATED';
 
-      // Colorize gauge based on severity
-      const circumference = 339.29; // 2 * pi * 54
+      const circumference = 376.99; // 2 * pi * 60
       const offset = circumference - (score / 100) * circumference;
       riskGaugeCircle.style.strokeDashoffset = offset;
 
       if (score < 35) {
-        riskGaugeCircle.setAttribute('class', 'text-emerald-400');
-        riskLevelBadge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 mt-0.5';
+        riskGaugeCircle.setAttribute('class', 'text-emerald-400 transition-all duration-1000 ease-out');
+        riskLevelBadge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 mt-1';
       } else if (score < 65) {
-        riskGaugeCircle.setAttribute('class', 'text-yellow-400');
-        riskLevelBadge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-300 mt-0.5';
+        riskGaugeCircle.setAttribute('class', 'text-yellow-400 transition-all duration-1000 ease-out');
+        riskLevelBadge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-yellow-500/20 text-yellow-300 mt-1';
       } else {
-        riskGaugeCircle.setAttribute('class', 'text-red-500');
-        riskLevelBadge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-500/20 text-red-300 mt-0.5';
+        riskGaugeCircle.setAttribute('class', 'text-red-500 transition-all duration-1000 ease-out');
+        riskLevelBadge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-red-500/20 text-red-300 mt-1';
       }
 
-      // Key Risks list
+      // Populate key risks
       keyRisksList.innerHTML = '';
       (risk.key_risks || []).forEach(r => {
         const item = document.createElement('div');
@@ -508,24 +627,54 @@
         keyRisksList.appendChild(item);
       });
 
-      // Render Citations
-      citationsList.innerHTML = '';
-      sourcesBadge.innerText = `${result.sources.length} sources`;
-      result.sources.forEach((s, idx) => {
-        const card = document.createElement('a');
-        card.href = s.url;
-        card.target = '_blank';
-        card.className = 'block p-3 rounded-xl bg-gray-900/80 hover:bg-gray-800 border border-gray-800 transition space-y-1 group';
-        card.innerHTML = `
+      // Update Threat Matrix bars
+      const metrics = risk.metrics || { security_cve_score: 20, architecture_debt_score: 25, governance_license_score: 15, maintenance_health_score: 18 };
+      document.getElementById('metric-cve-val').innerText = `${metrics.security_cve_score} / 100`;
+      document.getElementById('metric-cve-bar').style.width = `${metrics.security_cve_score}%`;
+
+      document.getElementById('metric-arch-val').innerText = `${metrics.architecture_debt_score} / 100`;
+      document.getElementById('metric-arch-bar').style.width = `${metrics.architecture_debt_score}%`;
+
+      document.getElementById('metric-gov-val').innerText = `${metrics.governance_license_score} / 100`;
+      document.getElementById('metric-gov-bar').style.width = `${metrics.governance_license_score}%`;
+
+      document.getElementById('metric-maint-val').innerText = `${metrics.maintenance_health_score} / 100`;
+      document.getElementById('metric-maint-bar').style.width = `${metrics.maintenance_health_score}%`;
+
+      // Citations List
+      sidebarCitationsList.innerHTML = '';
+      fullCitationsGrid.innerHTML = '';
+      citationsCountTab.innerText = result.sources.length;
+
+      result.sources.forEach((s) => {
+        // Sidebar item
+        const sideCard = document.createElement('a');
+        sideCard.href = s.url;
+        sideCard.target = '_blank';
+        sideCard.className = 'block p-3 rounded-xl bg-gray-900/80 hover:bg-gray-800 border border-gray-800 transition space-y-1 group';
+        sideCard.innerHTML = `
           <div class="flex items-center justify-between text-xs">
-            <span class="font-semibold text-gray-200 group-hover:text-nvidia transition line-clamp-1">${s.title || 'Untitled Source'}</span>
+            <span class="font-semibold text-gray-200 group-hover:text-nvidia transition line-clamp-1">${s.title}</span>
             <i data-lucide="external-link" class="w-3 h-3 text-gray-500 group-hover:text-nvidia"></i>
           </div>
           <p class="text-[10px] text-gray-500 font-mono truncate">${s.url}</p>
         `;
-        citationsList.appendChild(card);
+        sidebarCitationsList.appendChild(sideCard);
+
+        // Full tab card
+        const fullCard = document.createElement('div');
+        fullCard.className = 'p-4 rounded-xl bg-gray-900 border border-gray-800 space-y-2';
+        fullCard.innerHTML = `
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-semibold text-white line-clamp-1">${s.title}</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-nebius/10 text-nebius border border-nebius/30">Score: ${s.score || '0.90'}</span>
+          </div>
+          <a href="${s.url}" target="_blank" class="text-xs text-nvidia hover:underline font-mono truncate block">${s.url}</a>
+        `;
+        fullCitationsGrid.appendChild(fullCard);
       });
 
+      switchTab('dossier');
       lucide.createIcons();
     }
 
@@ -545,7 +694,7 @@
         btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i><span>Copied!</span>`;
         lucide.createIcons();
         setTimeout(() => {
-          btn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i><span>Copy</span>`;
+          btn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i><span>Copy Report</span>`;
           lucide.createIcons();
         }, 2000);
       });

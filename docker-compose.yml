@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  verifact-sentinel:
+    build: .
+    container_name: verifact-sentinel-app
+    ports:
+      - "8000:8000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - NEBIUS_API_KEY=${NEBIUS_API_KEY:-}
+      - NEBIUS_BASE_URL=${NEBIUS_BASE_URL:-https://api.tokenfactory.nebius.com/v1/}
+      - NEBIUS_MODEL=${NEBIUS_MODEL:-nvidia/llama-3.1-nemotron-70b-instruct}
+      - TAVILY_API_KEY=${TAVILY_API_KEY:-}
+    restart: unless-stopped
