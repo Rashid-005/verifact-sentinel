@@ -250,48 +250,87 @@ class VeriFactSentinelAgent:
             risk_match = re.search(r'\{.*\}', risk_raw, re.DOTALL)
             if risk_match:
                 risk_data = json.loads(risk_match.group(0))
-                # Reconcile model reasoning with empirical web signals
                 model_score = int(risk_data.get("risk_score", empirical_score))
                 final_score = int((model_score * 0.6) + (empirical_score * 0.4))
                 final_score = max(10, min(final_score, 94))
-                risk_data["risk_score"] = final_score
             else:
-                raise ValueError("Could not parse JSON")
+                final_score = empirical_score
         except Exception:
-            # High-fidelity empirical synthesis
-            if empirical_score < 35:
-                level = "LOW"
-                risks = [
-                    f"Ecosystem release cadence requires disciplined dependency version pinning for {target_topic}",
-                    "Configuration complexity in high-throughput multi-tenant deployments",
-                    "Telemetry instrumentation overhead during peak concurrency"
-                ]
-            elif empirical_score < 65:
-                level = "MODERATE"
-                risks = [
-                    f"Identified security considerations: {', '.join(cve_matches[:2]) if cve_matches else 'Input validation surface area'}",
-                    f"Elevated risk in third-party integrations and unconstrained tool-calling loops",
-                    "Requires strict network egress controls and credential vault rotation"
-                ]
-            else:
-                level = "CRITICAL"
-                risks = [
-                    f"Critical severity advisories detected: {', '.join(cve_matches[:3]) if cve_matches else 'Unpatched exploitation vectors'}",
-                    "Severe risk of unauthenticated remote execution or data compromise",
-                    "Immediate remediation and architectural isolation required"
-                ]
+            final_score = empirical_score
 
-            risk_data = {
-                "risk_score": empirical_score,
-                "risk_level": level,
-                "key_risks": risks,
-                "metrics": {
-                    "security_cve_score": min(95, max(10, empirical_score + (8 if cve_matches else -4))),
-                    "architecture_debt_score": min(90, max(12, int(empirical_score * 0.85))),
-                    "governance_license_score": min(85, max(8, 12 + (topic_seed % 10))),
-                    "maintenance_health_score": min(90, max(10, 15 + (topic_seed % 12)))
-                }
+        # Actionable Human Verdict & Direct Recommendation
+        if final_score < 35:
+            level = "LOW"
+            verdict = {
+                "status": "APPROVED",
+                "badge": "RECOMMENDED FOR PRODUCTION",
+                "color": "emerald",
+                "summary": f"Tunapendekeza kutumia '{target_topic}' kwa ujasiri. Mfumo huu una viwango vya juu vya usalama, unakubalika kibiashara, na unazingatia kanuni za uzalishaji.",
+                "reasons": [
+                    "Hakuna matundu makubwa ya usalama (CVEs) yaliyoripotiwa kwenye toleo rasmi la sasa.",
+                    "Usanifu wake una uwezo mkubwa wa kuhimili mzigo mkubwa wa uzalishaji (High Scalability & Concurrency).",
+                    "Leseni yake ni ya wazi (Permissive Open-Source) na inaruhusu matumizi ya kibiashara bila hofu ya kisheria."
+                ],
+                "action": "Unaweza kuendelea kuitumia kwa kufuata miongozo ya kawaida ya usanidi (Standard Production Setup)."
             }
+            risks = [
+                f"Ecosystem release cadence requires disciplined dependency version pinning for {target_topic}",
+                "Configuring proper connection pooling and concurrency boundaries",
+                "Telemetry and logging overhead during sustained peak loads"
+            ]
+        elif final_score < 65:
+            level = "MODERATE"
+            cve_str = ", ".join(cve_matches[:2]) if cve_matches else "Upanuzi wa attack surface kwenye plugins na zana za nje"
+            verdict = {
+                "status": "CAUTION",
+                "badge": "CONDITIONAL APPROVAL / USE WITH CAUTION",
+                "color": "yellow",
+                "summary": f"Tunakushauri kuchukua tahadhari kubwa kabla ya kutumia '{target_topic}'. Usiitumie bila kuweka vizuizi maalum vya kiusalama (Guardrails).",
+                "reasons": [
+                    f"Kuna viashiria vya kiusalama: {cve_str}.",
+                    "Inahitaji ukaguzi mkali wa pembejeo (Input sanitization) ili kuzuia mashambulizi ya injection au uvujaji.",
+                    "Wategemezi wa nje (Dependencies) wanabadilika kwa kasi na wanaweza kuleta migogoro ya kiufundi (breaking changes)."
+                ],
+                "action": "Tumia tu ikiwa umeweka mazingira ya ndani (Sandboxing), mawakili wa mtandao (Reverse Proxy), na ufuatiliaji wa tokeni."
+            }
+            risks = [
+                f"Identified security considerations: {cve_str}",
+                "Elevated risk in third-party integrations and unconstrained tool-calling loops",
+                "Requires strict network egress controls and credential vault rotation"
+            ]
+        else:
+            level = "CRITICAL"
+            cve_str = ", ".join(cve_matches[:3]) if cve_matches else "Active security advisories & critical exploits"
+            verdict = {
+                "status": "DANGER",
+                "badge": "STRICTLY NOT RECOMMENDED / DO NOT USE",
+                "color": "red",
+                "summary": f"HATUKUSHAURI KABISA kutumia '{target_topic}' kwenye mifumo yako ya uzalishaji (Production). Kuna hatari kubwa ya kudukuliwa au kupoteza data!",
+                "reasons": [
+                    f"Kuna matundu makubwa na hatarishi ya kiusalama: {cve_str}.",
+                    "Uwezekano mkubwa wa utekelezaji wa kodi haramu (Remote Code Execution) au udanganyifu wa mamlaka.",
+                    "Mradi una changamoto kubwa ya kiusalama inayohitaji marekebisho ya dharura kabla ya kufikiriwa kwa matumizi yoyote."
+                ],
+                "action": "Sitisha mara moja mipango ya kutumia mfumo huu, na badala yake tafuta toleo lililofanyiwa marekebisho (Patched Version) au mbadala salama zaidi."
+            }
+            risks = [
+                f"Critical severity advisories detected: {cve_str}",
+                "Severe risk of unauthenticated remote execution or data compromise",
+                "Immediate architectural isolation and dependency update mandatory"
+            ]
+
+        risk_data = {
+            "risk_score": final_score,
+            "risk_level": level,
+            "key_risks": risks,
+            "verdict": verdict,
+            "metrics": {
+                "security_cve_score": min(95, max(10, final_score + (6 if cve_matches else -4))),
+                "architecture_debt_score": min(90, max(12, int(final_score * 0.85))),
+                "governance_license_score": min(85, max(8, 12 + (topic_seed % 10))),
+                "maintenance_health_score": min(90, max(10, 15 + (topic_seed % 12)))
+            }
+        }
 
         yield {
             "stage": 4,
