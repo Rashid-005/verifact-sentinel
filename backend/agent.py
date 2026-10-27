@@ -265,13 +265,13 @@ class VeriFactSentinelAgent:
                 "status": "APPROVED",
                 "badge": "RECOMMENDED FOR PRODUCTION",
                 "color": "emerald",
-                "summary": f"Tunapendekeza kutumia '{target_topic}' kwa ujasiri. Mfumo huu una viwango vya juu vya usalama, unakubalika kibiashara, na unazingatia kanuni za uzalishaji.",
+                "summary": f"We strongly recommend '{target_topic}' for production deployment. This technology demonstrates verified security standards, permissive licensing, and enterprise readiness.",
                 "reasons": [
-                    "Hakuna matundu makubwa ya usalama (CVEs) yaliyoripotiwa kwenye toleo rasmi la sasa.",
-                    "Usanifu wake una uwezo mkubwa wa kuhimili mzigo mkubwa wa uzalishaji (High Scalability & Concurrency).",
-                    "Leseni yake ni ya wazi (Permissive Open-Source) na inaruhusu matumizi ya kibiashara bila hofu ya kisheria."
+                    "Zero critical unpatched security advisories (CVEs) detected in the current release.",
+                    "Architectural design delivers high operational scalability, robust concurrency, and low technical debt.",
+                    "Permissive open-source licensing permits commercial deployment without legal or IP contagion risks."
                 ],
-                "action": "Unaweza kuendelea kuitumia kwa kufuata miongozo ya kawaida ya usanidi (Standard Production Setup)."
+                "action": "Proceed with standard production configuration and automated dependency monitoring."
             }
             risks = [
                 f"Ecosystem release cadence requires disciplined dependency version pinning for {target_topic}",
@@ -280,18 +280,18 @@ class VeriFactSentinelAgent:
             ]
         elif final_score < 65:
             level = "MODERATE"
-            cve_str = ", ".join(cve_matches[:2]) if cve_matches else "Upanuzi wa attack surface kwenye plugins na zana za nje"
+            cve_str = ", ".join(cve_matches[:2]) if cve_matches else "Attack surface expansion in third-party plugins and external tool calls"
             verdict = {
                 "status": "CAUTION",
                 "badge": "CONDITIONAL APPROVAL / USE WITH CAUTION",
                 "color": "yellow",
-                "summary": f"Tunakushauri kuchukua tahadhari kubwa kabla ya kutumia '{target_topic}'. Usiitumie bila kuweka vizuizi maalum vya kiusalama (Guardrails).",
+                "summary": f"We advise caution before deploying '{target_topic}' directly to production. Ensure rigorous security guardrails, input sanitization, and sandboxing are enforced.",
                 "reasons": [
-                    f"Kuna viashiria vya kiusalama: {cve_str}.",
-                    "Inahitaji ukaguzi mkali wa pembejeo (Input sanitization) ili kuzuia mashambulizi ya injection au uvujaji.",
-                    "Wategemezi wa nje (Dependencies) wanabadilika kwa kasi na wanaweza kuleta migogoro ya kiufundi (breaking changes)."
+                    f"Identified security considerations: {cve_str}.",
+                    "Requires strict input sanitization and execution limits to mitigate prompt injection and data exfiltration.",
+                    "Rapid upstream release velocity and breaking changes require disciplined semantic version pinning."
                 ],
-                "action": "Tumia tu ikiwa umeweka mazingira ya ndani (Sandboxing), mawakili wa mtandao (Reverse Proxy), na ufuatiliaji wa tokeni."
+                "action": "Deploy only within isolated container sandboxes with network egress filtering and credential rotation."
             }
             risks = [
                 f"Identified security considerations: {cve_str}",
@@ -300,18 +300,18 @@ class VeriFactSentinelAgent:
             ]
         else:
             level = "CRITICAL"
-            cve_str = ", ".join(cve_matches[:3]) if cve_matches else "Active security advisories & critical exploits"
+            cve_str = ", ".join(cve_matches[:3]) if cve_matches else "Active security advisories & critical unpatched exploits"
             verdict = {
                 "status": "DANGER",
                 "badge": "STRICTLY NOT RECOMMENDED / DO NOT USE",
                 "color": "red",
-                "summary": f"HATUKUSHAURI KABISA kutumia '{target_topic}' kwenye mifumo yako ya uzalishaji (Production). Kuna hatari kubwa ya kudukuliwa au kupoteza data!",
+                "summary": f"We STRICTLY ADVISE AGAINST deploying '{target_topic}' in production environments. Critical vulnerabilities or severe technical debt were detected!",
                 "reasons": [
-                    f"Kuna matundu makubwa na hatarishi ya kiusalama: {cve_str}.",
-                    "Uwezekano mkubwa wa utekelezaji wa kodi haramu (Remote Code Execution) au udanganyifu wa mamlaka.",
-                    "Mradi una changamoto kubwa ya kiusalama inayohitaji marekebisho ya dharura kabla ya kufikiriwa kwa matumizi yoyote."
+                    f"Critical severity security advisories detected: {cve_str}.",
+                    "Elevated vulnerability to arbitrary remote code execution (RCE) or unauthorized privilege escalation.",
+                    "The technology has critical unpatched CVEs or governance flaws requiring immediate architectural remediation."
                 ],
-                "action": "Sitisha mara moja mipango ya kutumia mfumo huu, na badala yake tafuta toleo lililofanyiwa marekebisho (Patched Version) au mbadala salama zaidi."
+                "action": "Halt all production deployment plans immediately. Adopt patched releases or migrate to vetted secure alternatives."
             }
             risks = [
                 f"Critical severity advisories detected: {cve_str}",
