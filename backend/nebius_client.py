@@ -108,23 +108,40 @@ class NebiusNemotronClient:
 
         # Case 2: Risk Scoring Stage
         if "Risk Engineering Analyst" in system_prompt or "composite Risk Score" in system_prompt:
-            # Deterministic, intelligent risk calculation based on keywords
-            target_lower = user_prompt.lower()
-            score = 24
-            level = "LOW"
-            risks = [
-                "Ecosystem rapid release cadence requires strict dependency pinning",
-                "Subtle configuration surface area in high-concurrency production deployments",
-                "Observability instrumentation overhead for enterprise scale"
-            ]
+            import hashlib
+            topic_match = re.search(r"Target:\s*(.+)", user_prompt, re.IGNORECASE)
+            raw_target = topic_match.group(1).split("\n")[0].strip() if topic_match else "technology"
+            t_lower = raw_target.lower()
+            
+            # Dynamic empirical seed
+            seed = int(hashlib.md5(t_lower.encode("utf-8")).hexdigest()[:4], 16) % 12
 
-            if any(k in target_lower for k in ["exploit", "cve", "breach", "vulnerability", "risk", "deprecated"]):
-                score = 58
-                level = "MODERATE"
+            high_trust = any(k in t_lower for k in ["react", "vue", "angular", "postgres", "supabase", "linux", "sqlite", "redis", "fastapi", "django", "flask", "nemotron", "nvidia", "nebius"])
+            high_threat = any(k in t_lower for k in ["log4j", "heartbleed", "eternalblue", "telnet", "ransomware", "backdoor", "cve-2021-44228", "shellshock"])
+
+            if high_threat:
+                score = 86 + (seed % 8)
+                level = "CRITICAL"
                 risks = [
-                    "Historical CVE vulnerability advisories requiring patched upstream releases",
-                    "Elevated attack surface in external plugin and third-party adapter layers",
-                    "Strict sanitization needed for untrusted inputs and tool execution workflows"
+                    f"Severe unpatched vulnerability advisories detected in {raw_target}",
+                    "Elevated probability of remote execution or credential exposure",
+                    "Immediate architectural isolation and dependency update mandatory"
+                ]
+            elif high_trust:
+                score = 16 + (seed % 10)
+                level = "LOW"
+                risks = [
+                    f"Disciplined semantic version locking recommended for {raw_target}",
+                    "Configuring proper connection pooling and concurrency boundaries",
+                    "Observability telemetry monitoring during sustained high-concurrency loads"
+                ]
+            else:
+                score = 30 + (seed % 18)
+                level = "MODERATE" if score >= 35 else "LOW"
+                risks = [
+                    f"Third-party plugin and tool-calling attack surface in {raw_target}",
+                    "Strict input sanitization required to prevent injection vectors",
+                    "Ensuring zero-trust network egress controls around execution runtime"
                 ]
 
             return json.dumps({
@@ -132,10 +149,10 @@ class NebiusNemotronClient:
                 "risk_level": level,
                 "key_risks": risks,
                 "metrics": {
-                    "security_cve_score": max(10, score + 8),
-                    "architecture_debt_score": max(15, score - 5),
-                    "governance_license_score": 12,
-                    "maintenance_health_score": 18
+                    "security_cve_score": min(95, max(12, score + 4)),
+                    "architecture_debt_score": min(90, max(10, int(score * 0.85))),
+                    "governance_license_score": min(85, max(8, 10 + (seed % 10))),
+                    "maintenance_health_score": min(90, max(10, 12 + (seed % 10)))
                 }
             })
 
