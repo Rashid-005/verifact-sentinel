@@ -687,7 +687,6 @@
       }
 
       // Risk score rendering
-      const score = Math.min(Math.max(risk.risk_score || 0, 0), 100);
       riskScoreDisplay.innerText = score;
       riskLevelBadge.innerText = risk.risk_level || 'EVALUATED';
 
